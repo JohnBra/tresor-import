@@ -4,7 +4,6 @@ class ParqetError extends Error {
   }
 }
 
-
 export class ParqetDocumentError extends ParqetError {
   /**
    * Covers status codes 1, 2, 4 and 7 (implementation errors/unknown documents/unknown extensions/ignored documents)
@@ -19,7 +18,6 @@ export class ParqetDocumentError extends ParqetError {
     this.data = { status };
   }
 }
-
 
 export class ParqetParserError extends ParqetError {
   /**
@@ -46,13 +44,13 @@ export class ParqetActivityValidationError extends ParqetError {
    * @param {number} status - Parqet error code
    */
   constructor(message, activity, status) {
-    super(`${message}\nActivity: ${
-      JSON.stringify(
-        activity, 
-        (k, v) => v === undefined ? '>>>  undefined  <<<' : v, 
+    super(
+      `${message}\nActivity: ${JSON.stringify(
+        activity,
+        (k, v) => (v === undefined ? '>>>  undefined  <<<' : v),
         2
-      )
-    }`);
+      )}`
+    );
     this.name = this.constructor.name;
     this.data = { status };
   }
