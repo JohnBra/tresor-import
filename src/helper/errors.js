@@ -1,6 +1,7 @@
 class ParqetError extends Error {
   constructor(message) {
     super(message);
+    this.name = this.constructor.name;
   }
 }
 
@@ -47,7 +48,7 @@ export class ParqetActivityValidationError extends ParqetError {
     super(
       `${message}\nActivity: ${JSON.stringify(
         activity,
-        (k, v) => (v === undefined ? '>>>  undefined  <<<' : v),
+        (k, v) => (v === undefined ? 'undefined <<<<<<<<<<<<<<<<<<<<<<<<<' : v),
         2
       )}`
     );
