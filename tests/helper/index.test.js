@@ -113,7 +113,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity without type should be invalid', () => {
@@ -131,7 +133,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a date after today should be invalid', () => {
@@ -151,7 +155,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a date older than 1990-01-01 should be invalid', () => {
@@ -171,7 +177,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a datetime newer than today should be invalid', () => {
@@ -191,7 +199,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a datetime older than 1990-01-01 should be invalid', () => {
@@ -209,7 +219,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a negative number of shares should be invalid', () => {
@@ -227,7 +239,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a string value as shares should be invalid', () => {
@@ -245,7 +259,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a negative price per shares should be invalid', () => {
@@ -263,7 +279,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a string value as price per shares should be invalid', () => {
@@ -281,7 +299,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a negative amount should be invalid', () => {
@@ -299,7 +319,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with a string value as amount should be invalid', () => {
@@ -317,7 +339,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with an unknown ISIN scheme should be invalid', () => {
@@ -335,7 +359,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with an unknown type should be invalid', () => {
@@ -353,7 +379,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity with an invalid wkn should be invalid', () => {
@@ -371,7 +399,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity without an isin or wkn should be invalid', () => {
@@ -387,7 +417,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
 
     test('Activity without a company, isin or wkn should be invalid', () => {
@@ -403,7 +435,9 @@ describe('Helper functions', () => {
         tax: 0,
       };
 
-      expect(() => helper.validateActivity(activity)).toThrowError(ParqetActivityValidationError);
+      expect(() => helper.validateActivity(activity)).toThrowError(
+        ParqetActivityValidationError
+      );
     });
   });
 
