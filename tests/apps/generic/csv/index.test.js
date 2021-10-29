@@ -70,8 +70,10 @@ describe('Generic CSV', function () {
         } catch (e) {
           err = e;
         }
-        expect(() => genericCSV.parsePages(readTestFile(sample, false)))
-          .toThrowError(ParqetActivityValidationError);
+
+        expect(() =>
+          genericCSV.parsePages(readTestFile(sample, false))
+        ).toThrowError(ParqetActivityValidationError);
         expect(err.data.status).toEqual(5);
       }
     );
