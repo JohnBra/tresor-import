@@ -14,8 +14,6 @@ class ParqetError extends Error {
  */
 export class ParqetDocumentError extends ParqetError {
   /**
-   *
-   *
    * @param {string} message - error message
    * @param {string} fileName - file name incl. extension causing the document error
    * @param {(1|2|4|7)} status - Parqet error code
