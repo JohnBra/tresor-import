@@ -2,6 +2,7 @@ import * as genericCSV from '../../../../src/apps/generic/csv';
 import fs from 'fs';
 import glob from 'glob';
 import { csvLinesToJSON } from '@/helper';
+import { ParqetActivityValidationError } from '../../../../src/errors';
 
 // TODO copied from portfolio performance tests, move to general utils and import
 const readTestFile = (file, parseAsJson) => {
@@ -61,11 +62,17 @@ describe('Generic CSV', function () {
 
   describe('parsePages', () => {
     test.each(emptyMockFiles)(
-      'should return empty activity array and code 5 for: %s',
+      'should throw ParqetActivityValidationError with status 5 for: %s',
       sample => {
-        const result = genericCSV.parsePages(readTestFile(sample, false));
-
-        expect(result).toEqual({ activities: [], status: 5 });
+        let err;
+        try {
+          genericCSV.parsePages(readTestFile(sample, false));
+        } catch (e) {
+          err = e;
+        }
+        expect(() => genericCSV.parsePages(readTestFile(sample, false)))
+          .toThrowError(ParqetActivityValidationError);
+        expect(err.data.status).toEqual(5);
       }
     );
 

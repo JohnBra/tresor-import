@@ -1,5 +1,5 @@
 import * as helper from '../../src/helper';
-import { ParqetActivityValidationError } from '../../src/helper/errors';
+import { ParqetActivityValidationError } from '../../src/errors';
 
 describe('Helper functions', () => {
   let consoleErrorSpy;
