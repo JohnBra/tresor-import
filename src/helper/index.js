@@ -1,7 +1,7 @@
 import every from 'lodash/every';
 import values from 'lodash/values';
 import { DateTime } from 'luxon';
-import { ParqetActivityValidationError } from './errors';
+import { ParqetActivityValidationError } from '@/errors';
 
 // Regex to match an ISIN-only string. The first two chars represent the country and the last one is the check digit.
 export const isinRegex = /^[A-Z]{2}[0-9A-Z]{9}[0-9]$/;

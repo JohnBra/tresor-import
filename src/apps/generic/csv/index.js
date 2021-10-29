@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { validateActivity } from '@/helper';
 import { FIELD_MAP } from './utils';
-import { ParqetParserError } from './errors';
+import { ParqetParserError, ParqetActivityValidationError } from '@/errors';
 import { DateTime } from 'luxon';
 
 /**
@@ -40,45 +40,26 @@ export const parsePages = content => {
   try {
     headers = content.splice(0, 1)[0].split(';');
   } catch (error) {
-    // Could not extract headers from CSV file
-    return {
-      activities,
-      status: 3, // Critical unforeseen error during parsing, abort.
-    };
+    throw new ParqetParserError(
+      'Invalid CSV. Failed to extract headers from CSV file.',
+      content
+    );
   }
 
   if (content.length === 0) {
-    return {
-      activities,
-      status: 5, // No activities found for a valid document
-    };
+    throw new ParqetActivityValidationError(
+      'Invalid CSV. Failed to find activities in CSV file.',
+      content,
+      5
+    );
   }
 
   const lowerCaseHeaders = headers.map(header => header.toLowerCase().trim());
 
   // parse every content row
-  // return empty activity array and status code on error
   for (let i = 0; i < content.length; i++) {
-    const line = content[i].trim();
-    if (line.length === 0) {
-      continue;
-    }
-
-    // try catch for error here --> the further we throw, the better
-    // --> just doing it here, to show what we could do with custom errors
-    //     possibly better: catch error in function calling 'parsePages'
-    try {
-      const activity = parseRow(lowerCaseHeaders, line);
-      if (activity) activities.push(activity);
-    } catch (error) {
-      console.error(
-        `${error.name} in row [${i}] reading [${error.data.input}]: ${error.message}`
-      );
-      return {
-        activities: [],
-        status: error.data.status,
-      };
-    }
+    const activity = parseRow(lowerCaseHeaders, content[i]);
+    activities.push(activity);
   }
 
   return {
@@ -120,11 +101,10 @@ const parseRow = (lowerCaseHeaders, row) => {
   }
 
   if (!activity.datetime && !activity.date) {
-    // return status code 7 (invalid document) --> might need a different code here
-    throw new ParqetParserError(
-      'One of datetime, or date must be supplied',
-      JSON.stringify(activity),
-      7
+    throw new ParqetActivityValidationError(
+      `Invalid activity. One of datetime, or date must be supplied.`,
+      activity,
+      6
     );
   }
 
@@ -138,11 +118,10 @@ const parseRow = (lowerCaseHeaders, row) => {
   }
 
   if (!activity.holding && !activity.isin && !activity.wkn) {
-    // return status code 7 (invalid document) --> might need a different code here
-    throw new ParqetParserError(
-      'One of holding, isin, or wkn must be supplied',
-      JSON.stringify(activity),
-      7
+    throw new ParqetActivityValidationError(
+      `Invalid activity. One of holding, isin, or wkn must be supplied.`,
+      activity,
+      6
     );
   }
 
