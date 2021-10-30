@@ -72,7 +72,11 @@ new Vue({
         return;
       }
 
-      const result = parseActivitiesFromPages(content, this.jsonExtension);
+      const result = parseActivitiesFromPages(
+        content,
+        `demo_file.${this.jsonExtension}`,
+        this.jsonExtension
+      );
 
       this.clearResults();
 

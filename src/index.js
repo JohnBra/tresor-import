@@ -4,6 +4,13 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import * as brokers from './brokers';
 import * as apps from './apps';
 import { isBrowser, isNode } from 'browser-or-node';
+import {
+  ParqetActivityValidationError,
+  ParqetDocumentError,
+  ParqetParserError,
+} from '@/errors';
+
+export const acceptedFileTypes = ['pdf', 'csv'];
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -15,65 +22,74 @@ export const allImplementations = [
 
 /** @type { (pages: Importer.Page[], extension: string) => Importer.Implementation[] | undefined} */
 export const findImplementation = (pages, extension) => {
+/**
+ * @param {Importer.page[]} pages
+ * @param {string} fileName
+ * @param {string} extension
+ * @returns {Importer.Implementation}
+ */
+export function findImplementation(pages, fileName, extension) {
+  if (!acceptedFileTypes.includes(extension.toLowerCase()))
+    throw new ParqetDocumentError(
+      `Invalid document. Unsupported file type '${extension}'. Extension must be one of [${acceptedFileTypes.join(
+        ','
+      )}].`,
+      fileName,
+      4
+    );
+
   // The broker or app will be selected by the content of the first page
-  return allImplementations.filter(implementation =>
-    implementation.canParseDocument(pages, extension)
+  const implementations = allImplementations.filter(impl =>
+    impl.canParseDocument(pages, extension)
   );
-};
 
-/** @type { (pages: Importer.Page[], extension: string) => Importer.ParserResult } */
-export const parseActivitiesFromPages = (pages, extension) => {
-  if (pages.length === 0) {
-    // Without pages we don't have any activity
-    return {
-      activities: undefined,
-      status: 1,
-    };
+  if (implementations === undefined || !implementations.length)
+    throw new ParqetDocumentError(
+      `Invalid document. Failed to find parser implementation for document.`,
+      fileName,
+      1
+    );
+
+  if (implementations.length > 1)
+    throw new ParqetDocumentError(
+      `Invalid document. Found multiple parser implementations for document.`,
+      fileName,
+      2
+    );
+
+  return implementations[0];
+}
+
+/**
+ * @param {Importer.page[]} pages
+ * @param {string} fileName
+ * @param {string} extension
+ * @returns {Importer.Activity[]}
+ */
+export function parseActivitiesFromPages(pages, fileName, extension) {
+  if (!pages.length)
+    throw new ParqetDocumentError(
+      `Invalid document. Document is empty.`,
+      fileName,
+      1
+    );
+
+  const impl = findImplementation(pages, fileName, extension);
+
+  let activities = [];
+
+  if (extension === 'pdf') {
+    activities = filterResultActivities(impl.parsePages(pages));
+  } else if (extension === 'csv') {
+    activities = filterResultActivities(
+      impl.parsePages(JSON.parse(csvLinesToJSON(pages[0])))
+    );
   }
 
-  /** @type { Importer.ParserStatus } */
-  let status;
-  const implementations = findImplementation(pages, extension);
+  return activities;
+}
 
-  try {
-    if (implementations === undefined || implementations.length < 1) {
-      // Status 1, no broker could be found
-      status = 1;
-    } else if (implementations.length === 1) {
-      if (extension === 'pdf') {
-        return filterResultActivities(implementations[0].parsePages(pages));
-      } else if (extension === 'csv') {
-        const implementation = implementations[0];
-
-        let content = pages[0];
-        if (!implementation.parsingIsTextBased()) {
-          content = JSON.parse(csvLinesToJSON(content));
-        }
-
-        return filterResultActivities(implementations[0].parsePages(content));
-      }
-      // Invalid Filetype
-      else {
-        status = 4;
-      }
-    }
-    // More than one broker found
-    else if (implementations.length > 1) {
-      status = 2;
-    }
-  } catch (error) {
-    // Critical Error occurred
-    console.error(error);
-    status = 3;
-  }
-
-  return {
-    activities: undefined,
-    status,
-  };
-};
-
-/** @type { (file: File) => Promise<Importer.ParsedFile>} */
+/** @type { (file: File) => Promise<Importer.ParsedFile> } */
 export const parseFile = file => {
   return new Promise(resolve => {
     const extension = file.name.split('.').pop().toLowerCase();
@@ -133,20 +149,32 @@ export default file => {
   return new Promise(resolve => {
     try {
       parseFile(file).then(parsedFile => {
-        const result = parseActivitiesFromPages(
+        const activities = parseActivitiesFromPages(
           parsedFile.pages,
+          file.name,
           parsedFile.extension
         );
 
         resolve({
           file: file.name,
-          activities: result.activities,
-          status: result.status,
-          successful: result.activities !== undefined && result.status === 0,
+          activities,
+          status: 0,
+          successful: !!activities.length,
         });
       });
     } catch (error) {
-      console.error(error);
+      if (
+        error instanceof ParqetDocumentError ||
+        error instanceof ParqetParserError ||
+        error instanceof ParqetActivityValidationError
+      ) {
+        resolve({
+          file: file.name,
+          activities: [],
+          status: error.data.status,
+          successful: false,
+        });
+      }
     }
   });
 };
@@ -168,14 +196,17 @@ const filterResultActivities = result => {
     result.activities =
       numberOfActivities === 0 ? undefined : result.activities;
     result.status =
-      numberOfActivities === 0 && result.status == 0 ? 5 : result.status;
+      numberOfActivities === 0 && result.status === 0 ? 5 : result.status;
   }
 
   return result;
 };
 
-/** @type {(page: pdfjs.PDFPageProxy) => Promise<string[]>} */
-const parsePageToContent = async page => {
+/**
+ * @param {pdfjs.PDFPageProxy} page
+ * @returns {Promise<string[]>}
+ */
+async function parsePageToContent(page) {
   const parsedContent = [];
   const content = await page.getTextContent();
 
@@ -184,4 +215,4 @@ const parsePageToContent = async page => {
   }
 
   return parsedContent.filter(item => item.length > 0);
-};
+}

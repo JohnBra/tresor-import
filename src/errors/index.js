@@ -1,4 +1,4 @@
-class ParqetError extends Error {
+export class ParqetError extends Error {
   constructor(message) {
     super(message);
     this.name = this.constructor.name;
@@ -20,7 +20,6 @@ export class ParqetDocumentError extends ParqetError {
    */
   constructor(message, fileName, status) {
     super(`${message}\nFile: ${fileName}`);
-    this.name = this.constructor.name;
     this.data = { status };
   }
 }
@@ -38,7 +37,6 @@ export class ParqetParserError extends ParqetError {
    */
   constructor(message, input, status = 3) {
     super(`${message}\nInput: ${input}`);
-    this.name = this.constructor.name;
     this.data = { status };
   }
 }
@@ -62,7 +60,6 @@ export class ParqetActivityValidationError extends ParqetError {
         2
       )}`
     );
-    this.name = this.constructor.name;
     this.data = { status };
   }
 }
