@@ -1,7 +1,11 @@
+/**
+ * Custom error base class
+ */
 export class ParqetError extends Error {
-  constructor(message) {
+  constructor(message, status) {
     super(message);
     this.name = this.constructor.name;
+    this.data = { status };
   }
 }
 
@@ -19,8 +23,7 @@ export class ParqetDocumentError extends ParqetError {
    * @param {(1|2|4|7)} status - Parqet error code
    */
   constructor(message, fileName, status) {
-    super(`${message}\nFile: ${fileName}`);
-    this.data = { status };
+    super(`${message}\nFile: ${fileName}`, status);
   }
 }
 
@@ -36,8 +39,7 @@ export class ParqetParserError extends ParqetError {
    * @param {3} [status=3] - Parqet error code
    */
   constructor(message, input, status = 3) {
-    super(`${message}\nInput: ${input}`);
-    this.data = { status };
+    super(`${message}\nInput: ${input}`, status);
   }
 }
 
@@ -58,8 +60,8 @@ export class ParqetActivityValidationError extends ParqetError {
         activity,
         (k, v) => (v === undefined ? 'undefined <<<<<<<<<<<<<<<<<<<<<<<<<' : v),
         2
-      )}`
+      )}`,
+      status
     );
-    this.data = { status };
   }
 }
