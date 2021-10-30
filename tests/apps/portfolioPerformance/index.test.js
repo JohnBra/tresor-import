@@ -20,14 +20,15 @@ describe('Portfolio Performance', () => {
     });
 
     test('Can identify a implementation from the document as Portfolio Performance', () => {
-      testCases.forEach(sample => {
-        const implementations = findImplementation(
+      testCases.forEach((sample, index) => {
+        const implementation = findImplementation(
           readTestFile(sample, false),
+          `portfolio_performance_${index}.csv`,
           'csv'
         );
 
-        expect(implementations.length).toEqual(1);
-        expect(implementations[0]).toEqual(portfolioPerformance);
+        expect(implementation).toBeDefined();
+        expect(implementation).toEqual(portfolioPerformance);
       });
     });
   });
