@@ -112,7 +112,7 @@ const parseDecimal = (value, defaultValue) => {
   const normalized = trimmedValue.replace(',', '.');
 
   // Accepts only numbers and a maximum of one floating point
-  if (!/^(\d*|\d+\.\d+)$/.test(normalized)) {
+  if (!/^(\d+|\d+\.\d+)$/.test(normalized)) {
     throw new ParqetParserError(
       'Decimal value must only contain numbers and maximum of one floating point',
       trimmedValue
