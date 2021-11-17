@@ -125,7 +125,6 @@ function validateCommons(activity) {
   const oldestDate = new Date(1990, 1, 1);
   oldestDate.setUTCHours(0, 0, 0, 0);
 
-  // The date property must be present.
   if (activity.date === undefined) {
     throw new ParqetActivityValidationError(
       `Invalid 'date'. Activity 'date' field value must not be 'undefined'.`,
@@ -134,7 +133,6 @@ function validateCommons(activity) {
     );
   }
 
-  // The datetime property must be present.
   if (activity.datetime === undefined) {
     throw new ParqetActivityValidationError(
       `Invalid 'datetime'. Activity 'datetime' field value must not be 'undefined'.`,
@@ -143,7 +141,6 @@ function validateCommons(activity) {
     );
   }
 
-  // The date must be in the past.
   if (activity.date > tomorrow) {
     throw new ParqetActivityValidationError(
       `Invalid 'date'. Activity 'date' field value must be in the past.`,
@@ -152,7 +149,6 @@ function validateCommons(activity) {
     );
   }
 
-  // The date must be not older than 1990-01-01
   if (activity.date < oldestDate) {
     throw new ParqetActivityValidationError(
       `Invalid 'date'. Activity 'date' field value must be after 1990-01-01.`,
@@ -161,7 +157,6 @@ function validateCommons(activity) {
     );
   }
 
-  // The datetime must be in the past.
   if (activity.datetime > tomorrow) {
     throw new ParqetActivityValidationError(
       `Invalid 'datetime'. Activity 'datetime' field value must be in the past.`,
@@ -170,7 +165,6 @@ function validateCommons(activity) {
     );
   }
 
-  // The datetime must be not older than 1990-01-01
   if (activity.datetime < oldestDate) {
     throw new ParqetActivityValidationError(
       `Invalid 'datetime'. Activity 'datetime' field value must be after 1990-01-01.`,

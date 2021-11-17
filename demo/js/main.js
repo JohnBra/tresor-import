@@ -48,7 +48,7 @@ new Vue({
       return this.numberWithCommas(p.toFixed(2));
     },
     handleParserResults(result) {
-      if (result.activities) {
+      if (result.activities && result.activities.length) {
         console.table(result.activities);
       }
 
@@ -72,20 +72,32 @@ new Vue({
         return;
       }
 
-      const result = parseActivitiesFromPages(
-        content,
-        `demo_file.${this.jsonExtension}`,
-        this.jsonExtension
-      );
+      let activities = [];
+      let status = 0;
+
+      try {
+        activities = parseActivitiesFromPages(
+          content,
+          `demo_file.${this.jsonExtension}`,
+          this.jsonExtension
+        );
+      } catch (e) {
+        console.error(e);
+        if (e.data && e.data.status) {
+          status = e.data.status;
+        } else {
+          status = 3; // unexpected error parsing (e.g. JSON.parse didn't work)
+        }
+      }
 
       this.clearResults();
 
       this.handleParserResults({
         file: 'json.' + this.jsonExtension,
         content: this.jsonContent,
-        activities: result.activities,
-        status: result.status,
-        successful: result.activities !== undefined && result.status === 0,
+        activities,
+        status,
+        successful: activities !== undefined && status === 0,
       });
     },
     copyContentToClipboard(name) {
