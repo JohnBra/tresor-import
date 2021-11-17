@@ -4,7 +4,7 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import * as brokers from './brokers';
 import * as apps from './apps';
 import { isBrowser, isNode } from 'browser-or-node';
-import { ParqetError, ParqetDocumentError } from '@/errors';
+import { ParqetDocumentError, ParqetActivityValidationError } from '@/errors';
 
 export const acceptedFileTypes = ['pdf', 'csv'];
 
@@ -72,17 +72,24 @@ export function parseActivitiesFromPages(pages, fileName, extension) {
 
   const impl = findImplementation(pages, fileName, extension);
 
-  let activities = [];
+  /** @type { Importer.ParserResult } */
+  let parsePagesResult;
 
   if (extension === 'pdf') {
-    activities = filterResultActivities(impl.parsePages(pages));
+    parsePagesResult = impl.parsePages(pages);
+    console.log('res: ', parsePagesResult);
   } else if (extension === 'csv') {
-    activities = filterResultActivities(
-      impl.parsePages(JSON.parse(csvLinesToJSON(pages[0])))
-    );
+    parsePagesResult = impl.parsePages(JSON.parse(csvLinesToJSON(pages[0])));
   }
 
-  return activities;
+  if (!parsePagesResult.activities.length)
+    throw new ParqetActivityValidationError(
+      `Empty document. No activities found in parsable document.`,
+      {},
+      5
+    );
+
+  return parsePagesResult.activities;
 }
 
 /** @type { (file: File) => Promise<Importer.ParsedFile> } */
@@ -143,55 +150,21 @@ export const parseFile = file => {
 
 export default file => {
   return new Promise(resolve => {
-    try {
-      parseFile(file).then(parsedFile => {
-        const activities = parseActivitiesFromPages(
-          parsedFile.pages,
-          file.name,
-          parsedFile.extension
-        );
+    parseFile(file).then(parsedFile => {
+      const activities = parseActivitiesFromPages(
+        parsedFile.pages,
+        file.name,
+        parsedFile.extension
+      );
 
-        resolve({
-          file: file.name,
-          activities,
-          status: 0,
-          successful: !!activities.length,
-        });
+      resolve({
+        file: file.name,
+        activities,
+        status: 0,
+        successful: !!activities.length,
       });
-    } catch (error) {
-      if (error instanceof ParqetError) {
-        resolve({
-          file: file.name,
-          activities: [],
-          status: error.data.status,
-          successful: false,
-        });
-      }
-    }
+    });
   });
-};
-
-const filterResultActivities = result => {
-  if (result.activities !== undefined) {
-    if (
-      result.activities.filter(activity => activity === undefined).length > 0
-    ) {
-      // One or more activities are invalid and can't be validated with the validateActivity function. We should ignore this document and return the specific status code.
-      result.activities = undefined;
-      result.status = 6;
-
-      return result;
-    }
-
-    // If no activity exists, set the status code to 5
-    const numberOfActivities = result.activities.length;
-    result.activities =
-      numberOfActivities === 0 ? undefined : result.activities;
-    result.status =
-      numberOfActivities === 0 && result.status === 0 ? 5 : result.status;
-  }
-
-  return result;
 };
 
 /**
