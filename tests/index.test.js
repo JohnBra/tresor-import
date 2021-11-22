@@ -2,7 +2,7 @@ import {
   allImplementations,
   findImplementation,
   parseActivitiesFromPages,
-  parseFile
+  parseFile,
 } from '../src';
 import * as onvista from '../src/brokers/onvista';
 import { ParqetDocumentError } from '../src/errors';
@@ -23,7 +23,7 @@ describe('PDF handler', () => {
       expect(err.data).toBeDefined();
       expect(err.data.status).toBe(4);
     });
-  })
+  });
 
   describe('allImplementations', () => {
     test('All implementations must export (only) the functions canParseDocument and parsePages', () => {
