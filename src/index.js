@@ -4,7 +4,7 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import * as brokers from './brokers';
 import * as apps from './apps';
 import { isBrowser, isNode } from 'browser-or-node';
-import { ParqetDocumentError, ParqetActivityValidationError } from '@/errors';
+import { ParqetDocumentError, ParqetActivityValidationError, ParqetParserError, ParqetError } from '@/errors';
 
 export const acceptedFileTypes = ['pdf', 'csv'];
 
@@ -25,15 +25,6 @@ export const findImplementation = (pages, extension) => {
  * @returns {Importer.Implementation}
  */
 export function findImplementation(pages, fileName, extension) {
-  if (!acceptedFileTypes.includes(extension.toLowerCase()))
-    throw new ParqetDocumentError(
-      `Invalid document. Unsupported file type '${extension}'. Extension must be one of [${acceptedFileTypes.join(
-        ','
-      )}].`,
-      fileName,
-      4
-    );
-
   // The broker or app will be selected by the content of the first page
   const implementations = allImplementations.filter(impl =>
     impl.canParseDocument(pages, extension)
@@ -77,7 +68,6 @@ export function parseActivitiesFromPages(pages, fileName, extension) {
 
   if (extension === 'pdf') {
     parsePagesResult = impl.parsePages(pages);
-    console.log('res: ', parsePagesResult);
   } else if (extension === 'csv') {
     parsePagesResult = impl.parsePages(JSON.parse(csvLinesToJSON(pages[0])));
   }
@@ -96,6 +86,16 @@ export function parseActivitiesFromPages(pages, fileName, extension) {
 export const parseFile = file => {
   return new Promise(resolve => {
     const extension = file.name.split('.').pop().toLowerCase();
+
+    if (!acceptedFileTypes.includes(extension))
+      throw new ParqetDocumentError(
+        `Invalid document. Unsupported file type '${extension}'. Extension must be one of [${acceptedFileTypes.join(
+          ','
+        )}].`,
+        file.name,
+        4
+      );
+
     const reader = new FileReader();
 
     reader.onload = async e => {
@@ -112,7 +112,11 @@ export const parseFile = file => {
 
       if (extension === 'pdf') {
         if (typeof e.target.result === 'string') {
-          throw Error('Expected ArrayBuffer - got string');
+          throw new ParqetParserError(
+            `Invalid file content. Expected 'pdf' file content to be of type 'ArrayBuffer' but received 'string'.`,
+            file.name,
+            3
+          );
         }
 
         fileContent = new Uint8Array(e.target.result);
@@ -128,7 +132,11 @@ export const parseFile = file => {
         }
       } else {
         if (typeof e.target.result !== 'string') {
-          throw Error('Expected target to be a string');
+          throw new ParqetParserError(
+            `Invalid file content. Expected file content to be of type 'string' for non 'pdf' file types.`,
+            file.name,
+            3
+          );
         }
 
         pages.push(e.target.result.trim().split('\n'));
@@ -150,20 +158,34 @@ export const parseFile = file => {
 
 export default file => {
   return new Promise(resolve => {
-    parseFile(file).then(parsedFile => {
-      const activities = parseActivitiesFromPages(
-        parsedFile.pages,
-        file.name,
-        parsedFile.extension
-      );
+    parseFile(file)
+      .then(parsedFile => {
+        const activities = parseActivitiesFromPages(
+          parsedFile.pages,
+          file.name,
+          parsedFile.extension
+        );
 
-      resolve({
-        file: file.name,
-        activities,
-        status: 0,
-        successful: !!activities.length,
+        resolve({
+          file: file.name,
+          activities,
+          status: 0,
+          successful: !!activities.length,
+        });
+      })
+      .catch(err => {
+        console.error(err); // optional to output the error on the console
+        let status = 3;
+        if (err instanceof ParqetError) status = err.data.status;
+        // This should be a 'reject' --> would break Parqet if not dealt with in calling function
+        // currently we are not handing over the arrow
+        resolve({
+          file: file.name,
+          activities: [],
+          status,
+          successful: false,
+        })
       });
-    });
   });
 };
 
