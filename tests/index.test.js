@@ -2,11 +2,29 @@ import {
   allImplementations,
   findImplementation,
   parseActivitiesFromPages,
+  parseFile
 } from '../src';
 import * as onvista from '../src/brokers/onvista';
 import { ParqetDocumentError } from '../src/errors';
 
 describe('PDF handler', () => {
+  describe('parseFile', () => {
+    test('should throw ParqetDocumentError with status 4 if file type is not supported', async () => {
+      const file = new File([new ArrayBuffer(1)], 'testfile.jpg');
+      let err;
+
+      try {
+        await parseFile(file);
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err instanceof ParqetDocumentError).toBe(true);
+      expect(err.data).toBeDefined();
+      expect(err.data.status).toBe(4);
+    });
+  })
+
   describe('allImplementations', () => {
     test('All implementations must export (only) the functions canParseDocument and parsePages', () => {
       allImplementations.forEach(implementation => {
@@ -31,26 +49,6 @@ describe('PDF handler', () => {
       );
 
       expect(implementation).toBeDefined();
-    });
-
-    test('should throw ParqetDocumentError with status 4 if file type is not supported', () => {
-      const pages = [
-        ['BIC BYLADEM1001', 'Dividendengutschrift', 'comdirect bank'],
-      ];
-      const fileName = 'invalid_filetype.vsc';
-      const extension = 'vsc';
-
-      let err;
-
-      try {
-        findImplementation(pages, fileName, extension);
-      } catch (e) {
-        err = e;
-      }
-
-      expect(err instanceof ParqetDocumentError).toBe(true);
-      expect(err.data).toBeDefined();
-      expect(err.data.status).toBe(4);
     });
 
     test('should throw ParqetDocumentError with status 1 if no implementation could be found for document', () => {
