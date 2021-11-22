@@ -4,7 +4,12 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import * as brokers from './brokers';
 import * as apps from './apps';
 import { isBrowser, isNode } from 'browser-or-node';
-import { ParqetDocumentError, ParqetActivityValidationError, ParqetParserError, ParqetError } from '@/errors';
+import {
+  ParqetDocumentError,
+  ParqetActivityValidationError,
+  ParqetParserError,
+  ParqetError,
+} from '@/errors';
 
 export const acceptedFileTypes = ['pdf', 'csv'];
 
@@ -184,7 +189,7 @@ export default file => {
           activities: [],
           status,
           successful: false,
-        })
+        });
       });
   });
 };
