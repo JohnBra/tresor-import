@@ -86,7 +86,7 @@ export const keyNormalizer = keyMap => transaction =>
     {}
   );
 
-export const checkCashActivity = transaction => {
+export const normalizeCashActivity = transaction => {
   if (
     transaction.type === 'Einlage' ||
     transaction.type === 'Entnahme' ||
