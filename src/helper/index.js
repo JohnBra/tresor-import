@@ -107,13 +107,7 @@ export function findPreviousRegexMatchIdx(arr, idx, regex) {
   return -1;
 }
 
-/**
- *
- * @param {Importer.Activity | Partial<Importer.Activity>} activity
- * @param {boolean} [findSecurityAlsoByCompany=false]
- * @returns {Importer.Activity | undefined}
- */
-export function validateActivity(activity, findSecurityAlsoByCompany = false) {
+function validateCommons(activity) {
   // All fields must have a value unequal undefined
   if (!every(values(activity), a => !!a || a === 0)) {
     console.error(
@@ -129,15 +123,6 @@ export function validateActivity(activity, findSecurityAlsoByCompany = false) {
 
   const oldestDate = new Date(1990, 1, 1);
   oldestDate.setUTCHours(0, 0, 0, 0);
-
-  // The date property must be present.
-  if (activity.date === undefined) {
-    console.error(
-      'The activity date for ' + activity.broker + ' must be present.',
-      activity
-    );
-    return undefined;
-  }
 
   // The datetime property must be present.
   if (activity.datetime === undefined) {
@@ -238,6 +223,21 @@ export function validateActivity(activity, findSecurityAlsoByCompany = false) {
     return undefined;
   }
 
+  return activity;
+}
+
+export function validateActivity(activity, findSecurityAlsoByCompany = false) {
+  if(validateCommons(activity) === undefined) return undefined;
+
+  // The date property must be present.
+  if (activity.date === undefined) {
+    console.error(
+      'The activity date for ' + activity.broker + ' must be present.',
+      activity
+    );
+    return undefined;
+  }
+
   // Tresor One will search the security for PDF Documents with ISIN or WKN. For Imports of .csv File from Portfolio Performance
   // T1 can search the security also by the Company.
   if (
@@ -292,6 +292,10 @@ export function validateActivity(activity, findSecurityAlsoByCompany = false) {
   }
 
   return /** @type {Importer.Activity} */ (activity);
+}
+
+export function validateCashActivity(activity) {
+  return validateCommons(activity);
 }
 
 // Finds next regex match starting at the given offset

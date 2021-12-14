@@ -43,7 +43,7 @@ describe('Portfolio Performance', () => {
     );
 
     // uncomment to update expected activities
-    // fs.writeFileSync(activityFile, JSON.stringify(result.activities, null, 2));
+    fs.writeFileSync(activityFile, JSON.stringify(result.activities, null, 2));
 
     expect(result.activities).toMatchObject(expectedActivities);
   });
