@@ -199,7 +199,7 @@ function validateCommons(activity) {
 }
 
 export function validateActivity(activity, findSecurityAlsoByCompany = false) {
-  if(validateCommons(activity) === undefined) return undefined;
+  if (validateCommons(activity) === undefined) return undefined;
 
   // The date property must be present.
   if (activity.date === undefined) {
@@ -250,7 +250,9 @@ export function validateActivity(activity, findSecurityAlsoByCompany = false) {
   }
 
   if (
-    !['Buy', 'Sell', 'Dividend', 'TransferIn', 'TransferOut'].includes(activity.type)
+    !['Buy', 'Sell', 'Dividend', 'TransferIn', 'TransferOut'].includes(
+      activity.type
+    )
   ) {
     console.error(
       'The activity type for ' +
