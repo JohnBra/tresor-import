@@ -6,7 +6,7 @@ import {
   validateCashActivity,
 } from '@/helper';
 import {
-  checkCashActivity,
+  normalizeCashActivity,
   detectLocale,
   getKeyMap,
   getTypeMap,
@@ -200,7 +200,7 @@ export const parsePages = content => {
 
   const activities = content
     .map(normalizeKeys)
-    .map(transaction => checkCashActivity(transaction))
+    .map(transaction => normalizeCashActivity(transaction))
     .filter(({ shares }) => shares !== undefined)
     .filter(({ type }) => Boolean(type))
     .map(normalizeActivity)
