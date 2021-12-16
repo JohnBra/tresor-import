@@ -298,10 +298,6 @@ export function validateCashActivity(activity) {
   return validateCommons(activity);
 }
 
-export function validateCashActivity(activity) {
-  return validateCommons(activity);
-}
-
 // Finds next regex match starting at the given offset
 export function findFirstRegexIndexInArray(array, regex, offset = 0) {
   const idx = array.slice(offset).findIndex(element => regex.test(element));
