@@ -754,9 +754,8 @@ describe('Broker: Consorsbank', () => {
     });
 
     test('should map pdf data of agnc investment corp', () => {
-      const activities = consorsbank.parsePages(
-        dividendsSamples[10]
-      ).activities;
+      const activities = consorsbank.parsePages(dividendsSamples[10])
+        .activities;
 
       expect(activities).toEqual([
         {
@@ -779,9 +778,8 @@ describe('Broker: Consorsbank', () => {
     });
 
     test('Can parse dividend from a 2015 total sa file', () => {
-      const activities = consorsbank.parsePages(
-        dividendsSamples[11]
-      ).activities;
+      const activities = consorsbank.parsePages(dividendsSamples[11])
+        .activities;
 
       expect(activities).toEqual([
         {
@@ -801,9 +799,8 @@ describe('Broker: Consorsbank', () => {
     });
 
     test('Can parse dividend from a 2016 bmw file', () => {
-      const activities = consorsbank.parsePages(
-        dividendsSamples[12]
-      ).activities;
+      const activities = consorsbank.parsePages(dividendsSamples[12])
+        .activities;
 
       expect(activities).toEqual([
         {
@@ -823,9 +820,8 @@ describe('Broker: Consorsbank', () => {
     });
 
     test('Can parse dividend from a 2018 total sa file', () => {
-      const activities = consorsbank.parsePages(
-        dividendsSamples[13]
-      ).activities;
+      const activities = consorsbank.parsePages(dividendsSamples[13])
+        .activities;
 
       expect(activities).toEqual([
         {
@@ -846,9 +842,8 @@ describe('Broker: Consorsbank', () => {
     });
 
     test('Can parse dividend from a 2018 DEUTSCHE POST AG file', () => {
-      const activities = consorsbank.parsePages(
-        dividendsSamples[14]
-      ).activities;
+      const activities = consorsbank.parsePages(dividendsSamples[14])
+        .activities;
 
       expect(activities).toEqual([
         {
@@ -869,9 +864,8 @@ describe('Broker: Consorsbank', () => {
     });
 
     test('The statement should be parsed: 2015_ishare_stoxx', () => {
-      const activities = consorsbank.parsePages(
-        dividendsSamples[15]
-      ).activities;
+      const activities = consorsbank.parsePages(dividendsSamples[15])
+        .activities;
 
       expect(activities).toEqual([
         {

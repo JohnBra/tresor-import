@@ -32,7 +32,6 @@ describe('Broker: ING', () => {
         ).toThrowError(ParqetDocumentError);
       });
     });
-
   });
 
   describe('Buy', () => {

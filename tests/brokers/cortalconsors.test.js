@@ -141,9 +141,8 @@ describe('Broker: Cortal Consors', () => {
 
   describe('Dividend', () => {
     test('Should map the document correctly: 2014_allianz', () => {
-      const activities = cortalconsors.parsePages(
-        dividendSamples[0]
-      ).activities;
+      const activities = cortalconsors.parsePages(dividendSamples[0])
+        .activities;
 
       expect(activities).toEqual([
         {
@@ -163,9 +162,8 @@ describe('Broker: Cortal Consors', () => {
     });
 
     test('Should map the document correctly: 2014_etf_x-tracke', () => {
-      const activities = cortalconsors.parsePages(
-        dividendSamples[1]
-      ).activities;
+      const activities = cortalconsors.parsePages(dividendSamples[1])
+        .activities;
 
       expect(activities).toEqual([
         {
