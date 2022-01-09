@@ -17,7 +17,7 @@ console.error = jest.fn();
 describe('Broker: onvista', () => {
   let multiPageResult;
 
-  validateAllSamples(onvista, allSamples);
+  validateAllSamples(onvista, allSamples, 'onvista');
 
   describe('Multiple Pages', () => {
     test('should parse a PDF with multiple bills', () => {

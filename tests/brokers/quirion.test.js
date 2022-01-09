@@ -7,7 +7,7 @@ import {
 } from './__mocks__/quirion';
 
 describe('Broker: quirion', () => {
-  validateAllSamples(quirion, allSamples);
+  validateAllSamples(quirion, allSamples, 'quirion');
 
   describe('Validate account statements', () => {
     test('Can parse document: 20201102', () => {

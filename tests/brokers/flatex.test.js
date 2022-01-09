@@ -13,7 +13,7 @@ import Big from 'big.js';
 describe('Broker: Flatex', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(flatex, allSamples);
+  validateAllSamples(flatex, allSamples, 'flatex');
 
   describe('canParseDocument', () => {
     test('should accept Buy, Sell, Div Flatex PDFs only', () => {

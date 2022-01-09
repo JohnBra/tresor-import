@@ -21,10 +21,8 @@ export const allImplementations = [
   ...Object.values(apps),
 ];
 
-/** @type { (pages: Importer.Page[], extension: string) => Importer.Implementation[] | undefined} */
-export const findImplementation = (pages, extension) => {
 /**
- * @param {Importer.page[]} pages
+ * @param {Importer.Page[]} pages
  * @param {string} fileName
  * @param {string} extension
  * @returns {Importer.Implementation}
@@ -53,7 +51,7 @@ export function findImplementation(pages, fileName, extension) {
 }
 
 /**
- * @param {Importer.page[]} pages
+ * @param {Importer.Page[]} pages
  * @param {string} fileName
  * @param {string} extension
  * @returns {Importer.Activity[]}

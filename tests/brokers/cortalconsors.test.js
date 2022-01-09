@@ -10,7 +10,7 @@ import {
 describe('Broker: Cortal Consors', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(cortalconsors, allSamples);
+  validateAllSamples(cortalconsors, allSamples, 'cortalconsors');
 
   describe('Buy', () => {
     test('Can parse 2005 Acatis buy', () => {

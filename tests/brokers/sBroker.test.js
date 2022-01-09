@@ -8,7 +8,7 @@ import {
 } from './__mocks__/sbroker';
 
 describe('Broker: sBroker', () => {
-  validateAllSamples(sbroker, allSamples);
+  validateAllSamples(sbroker, allSamples, 'sBroker');
 
   describe('Buy', () => {
     test('Can parse document: 2021_LU0323578657', () => {

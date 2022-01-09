@@ -12,7 +12,7 @@ import {
 describe('Smartbroker broker test', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(smartbroker, allSamples);
+  validateAllSamples(smartbroker, allSamples, 'smartbroker');
 
   describe('Buy', () => {
     test('should map pdf data of sample 1 correctly', () => {

@@ -1,19 +1,23 @@
 import { findImplementation } from '@/index';
 
-export function validateAllSamples(implementation, samples) {
+export function validateAllSamples(implementation, samples, filePrefix) {
   describe('Validate all', () => {
-    test('Can all documents parsed with implementation', () => {
+    test('Can the document parsed with 1822direkt', () => {
       samples.forEach(pages => {
         expect(implementation.canParseDocument(pages, 'pdf')).toEqual(true);
       });
     });
 
     test('Can identify the expected implementation from document', () => {
-      samples.forEach(pages => {
-        const implementations = findImplementation(pages, 'pdf');
+      samples.forEach((pages, index) => {
+        const impl = findImplementation(
+          pages,
+          `${filePrefix}_${index}.pdf`,
+          'pdf'
+        );
 
-        expect(implementations.length).toEqual(1);
-        expect(implementations[0]).toEqual(implementation);
+        expect(impl).toBeDefined();
+        expect(impl).toEqual(implementation);
       });
     });
   });

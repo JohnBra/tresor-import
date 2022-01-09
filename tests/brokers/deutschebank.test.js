@@ -11,7 +11,7 @@ import { deutschebank } from '../../src/brokers';
 describe('Broker: Deutsche Bank', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(deutschebank, allSamples);
+  validateAllSamples(deutschebank, allSamples, 'deutschebank');
 
   describe('Validate Dividend', () => {
     test('Can the transactions be parsed from: 2020_agnc_invest.json', () => {

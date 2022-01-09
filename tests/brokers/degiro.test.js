@@ -6,7 +6,7 @@ import { transactionLog, depotOverview, allSamples } from './__mocks__/degiro';
 describe('Broker: DEGIRO', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(degiro, allSamples);
+  validateAllSamples(degiro, allSamples, degiro);
 
   describe('Validate transactionLog', () => {
     test('Can the transactions be parsed from: buy_only_transactions', () => {
