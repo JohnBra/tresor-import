@@ -59,7 +59,7 @@ export const parsePages = content => {
   // parse every content row
   for (let i = 0; i < content.length; i++) {
     const activity = parseRow(lowerCaseHeaders, content[i]);
-    activities.push(activity);
+    if (activity) activities.push(activity);
   }
 
   return {
@@ -76,6 +76,14 @@ export const parsePages = content => {
  */
 const parseRow = (lowerCaseHeaders, row) => {
   const values = row.split(';');
+
+  // skip empty rows
+  if (!values) return;
+  if (values.length) {
+    const v = values[0].replace(/(\r\n|\n|\r)/gm, '');
+    if (!v) return;
+  }
+
   const activity = {};
 
   // add default values to activity regardless if it is present in CSV
@@ -92,7 +100,7 @@ const parseRow = (lowerCaseHeaders, row) => {
     const key = lowerCaseHeaders[i];
     if (FIELD_MAP.has(key)) {
       const { fieldName, parserFunc, defaultValue } = FIELD_MAP.get(key);
-      let params = [values[i].trim()];
+      let params = [values[i]];
       if (defaultValue) params = [...params, defaultValue];
       const parsedValue = parserFunc(...params);
       // only assign defined values --> ignore undefined values

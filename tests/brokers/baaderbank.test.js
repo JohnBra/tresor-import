@@ -12,7 +12,7 @@ import {
 describe('Broker: scalable.capital', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(baaderBank, allSamples);
+  validateAllSamples(baaderBank, allSamples, 'baaderbank');
 
   describe('Validate buys', () => {
     test('Can the market order be parsed from the document', () => {

@@ -13,7 +13,7 @@ import {
 describe('Broker: peaks', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(peaks, allSamples);
+  validateAllSamples(peaks, allSamples, 'peaks');
 
   describe('Validate buys', () => {
     test('Can all orders be parsed from overview', () => {

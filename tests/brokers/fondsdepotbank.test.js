@@ -10,7 +10,7 @@ import {
 describe('Broker: fondsdepotbank', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(fondsdepotbank, allSamples);
+  validateAllSamples(fondsdepotbank, allSamples, 'fondsdepotbank');
 
   describe('Validate buys', () => {
     test('Can the order parsed from single buy', () => {

@@ -7,7 +7,7 @@ const allSamples = buySamples.concat(dividendSamples);
 describe('Broker: Erste Bank', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(ersteBank, allSamples);
+  validateAllSamples(ersteBank, allSamples, 'ersteBank');
 
   describe('Validate buys', () => {
     test('Map the buy order for AT0000APOST4 correctly', () => {

@@ -11,7 +11,7 @@ import {
 describe('Broker: Union Invest', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(unioninvest, allSamples);
+  validateAllSamples(unioninvest, allSamples, 'unioninvest');
 
   describe('Validate buys', () => {
     test('Can parse a union invest buy from 2019 (1) ', () => {

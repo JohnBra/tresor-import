@@ -10,7 +10,7 @@ import {
 console.error = jest.fn();
 
 describe('Broker: Consorsbank', () => {
-  validateAllSamples(consorsbank, allSamples);
+  validateAllSamples(consorsbank, allSamples, 'consorsbank');
 
   describe('Buy', () => {
     test('should map pdf data of sample 1 correctly', () => {

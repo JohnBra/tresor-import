@@ -13,7 +13,7 @@ import {
 describe('Broker: Trade Republic', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(traderepublic, allSamples);
+  validateAllSamples(traderepublic, allSamples, 'traderepublic');
 
   describe('Validate buys', () => {
     test('Map a limit order correctly', () => {

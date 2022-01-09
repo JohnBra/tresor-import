@@ -10,6 +10,7 @@ import {
   depotStatement,
   postboxDepotStatement,
 } from './__mocks__/ing';
+import { ParqetDocumentError } from '../../src/errors';
 
 describe('Broker: ING', () => {
   let consoleErrorSpy;
@@ -21,16 +22,17 @@ describe('Broker: ING', () => {
     depotStatement
   );
 
-  validateAllSamples(ing, allSamples);
+  validateAllSamples(ing, allSamples, 'ing');
 
   describe('Check all documents', () => {
     test('Should not identify ing as broker if ing BIC is not present', () => {
-      invalidSamples.forEach(pages => {
-        const implementations = findImplementation(pages, 'pdf');
-
-        expect(implementations.length).toEqual(0);
+      invalidSamples.forEach((pages, index) => {
+        expect(() =>
+          findImplementation(pages, `ing_invalid_${index}.pdf`, 'pdf')
+        ).toThrowError(ParqetDocumentError);
       });
     });
+
   });
 
   describe('Buy', () => {

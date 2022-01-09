@@ -12,7 +12,7 @@ import {
 describe('Broker: commerzbank', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(commerzbank, allSamples);
+  validateAllSamples(commerzbank, allSamples, 'commerzbank');
 
   describe('Validate buys', () => {
     test('Can a buy order for A1T8FV_1 be parsed', () => {

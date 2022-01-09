@@ -11,7 +11,7 @@ import {
 describe('Broker: ebase', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(ebase, allSamples);
+  validateAllSamples(ebase, allSamples, 'ebase');
 
   describe('Validate buys', () => {
     test('Can parse multiple planned buys from a single page pdf', () => {

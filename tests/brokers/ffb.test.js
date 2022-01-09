@@ -13,7 +13,7 @@ import {
 describe('Broker: ffb', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(ffb, allSamples);
+  validateAllSamples(ffb, allSamples, 'ffb');
 
   describe('Validate buys', () => {
     test('Should map pdf data of sample correctly: saving_plan', () => {

@@ -12,7 +12,7 @@ import {
 describe('DKB broker', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(dkb, allSamples);
+  validateAllSamples(dkb, allSamples, 'dkb');
 
   describe('Buy', () => {
     test('should map pdf data of sample 1 correctly', () => {

@@ -5,7 +5,7 @@ import { dividendSamples, buySamples, allSamples } from './__mocks__/postbank';
 console.error = jest.fn();
 
 describe('Broker: Postbank', () => {
-  validateAllSamples(postbank, allSamples);
+  validateAllSamples(postbank, allSamples, 'postbank');
 
   describe('Buy', () => {
     test('should map pdf data of buy_savings_plan_vanguard_ftse_all_world_1.json correctly', () => {

@@ -13,7 +13,7 @@ import {
 describe('Broker: comdirect', () => {
   let consoleErrorSpy;
 
-  validateAllSamples(comdirect, allSamples);
+  validateAllSamples(comdirect, allSamples, 'comdirekt');
 
   describe('Validate buys', () => {
     test('Can the order parsed from saving_plan', () => {
