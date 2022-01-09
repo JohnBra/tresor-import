@@ -2,7 +2,7 @@ import { findImplementation } from '@/index';
 
 export function validateAllSamples(implementation, samples, filePrefix) {
   describe('Validate all', () => {
-    test('Can the document parsed with 1822direkt', () => {
+    test(`Can the document parse with ${filePrefix}`, () => {
       samples.forEach(pages => {
         expect(implementation.canParseDocument(pages, 'pdf')).toEqual(true);
       });
